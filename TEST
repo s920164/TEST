@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理情境挑戰模組</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+        
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .option-btn {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .feedback-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        .feedback-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .celebration {
+            animation: bounce 0.6s ease-in-out;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .star {
+            animation: twinkle 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        .pulse-btn {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen overflow-x-hidden">
+    <div class="w-screen h-screen flex flex-col" style="aspect-ratio: 16/9; max-width: 100vw; max-height: 100vh;">
+        <div class="flex-1 px-8 py-6 overflow-y-auto">
+        <!-- 模組標題 -->
+        <div class="text-center mb-6">
+            <h1 class="font-bold text-gray-800 mb-3" style="font-size: 36px;">🧠 本月管理情境挑戰</h1>
+            <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
+        </div>
+
+
+
+        <!-- 問題描述卡片 -->
+        <div class="bg-white rounded-xl p-6 mb-6 card-shadow">
+            <div class="flex items-start space-x-4">
+                <div class="bg-blue-100 rounded-full p-2 flex-shrink-0">
+                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h2 class="font-semibold text-gray-800 mb-3" style="font-size: 30px;">情境描述</h2>
+                    <p class="text-gray-700 leading-relaxed" style="font-size: 26px;">
+                        你發現某位部屬在你面前表現得非常積極，不但常常主動請益，還經常稱讚你的管理方式，給人一種「想要討好你」的感覺。但他實際的工作表現只是中等，你會怎麼處理？
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 選項按鈕 -->
+        <div class="grid grid-cols-2 gap-4 mb-6" id="optionsContainer">
+            <button class="option-btn bg-white rounded-lg p-4 text-center hover:bg-blue-50 border-2 border-transparent hover:border-blue-200 h-32 flex flex-col items-center justify-center" onclick="selectOption('A')">
+                <div class="bg-red-100 text-red-600 rounded-full w-12 h-12 flex items-center justify-center font-bold mb-2" style="font-size: 26px;">A</div>
+                <p class="text-gray-800 font-medium leading-tight" style="font-size: 26px;">持續觀察，不給太多評價，先讓對方保持動力</p>
+            </button>
+            
+            <button class="option-btn bg-white rounded-lg p-4 text-center hover:bg-blue-50 border-2 border-transparent hover:border-blue-200 h-32 flex flex-col items-center justify-center" onclick="selectOption('B')">
+                <div class="bg-orange-100 text-orange-600 rounded-full w-12 h-12 flex items-center justify-center font-bold mb-2" style="font-size: 26px;">B</div>
+                <p class="text-gray-800 font-medium leading-tight" style="font-size: 26px;">私下找部屬談談，說明觀察並澄清期待</p>
+            </button>
+            
+            <button class="option-btn bg-white rounded-lg p-4 text-center hover:bg-blue-50 border-2 border-transparent hover:border-blue-200 h-32 flex flex-col items-center justify-center" onclick="selectOption('C')">
+                <div class="bg-green-100 text-green-600 rounded-full w-12 h-12 flex items-center justify-center font-bold mb-2" style="font-size: 26px;">C</div>
+                <p class="text-gray-800 font-medium leading-tight" style="font-size: 26px;">設立明確的績效標準，強化行為與貢獻的連結</p>
+            </button>
+            
+            <button class="option-btn bg-white rounded-lg p-4 text-center hover:bg-blue-50 border-2 border-transparent hover:border-blue-200 h-32 flex flex-col items-center justify-center" onclick="selectOption('D')">
+                <div class="bg-purple-100 text-purple-600 rounded-full w-12 h-12 flex items-center justify-center font-bold mb-2" style="font-size: 26px;">D</div>
+                <p class="text-gray-800 font-medium leading-tight" style="font-size: 26px;">接納部屬的忠誠，開始針對性地進行指導與培養</p>
+            </button>
+        </div>
+
+        <!-- 回饋內容區域 -->
+        <div id="feedbackSection" class="hidden">
+            <!-- 慶祝動畫 -->
+            <div class="text-center mb-4">
+                <div class="celebration inline-block">
+                    <span class="text-3xl">🎉</span>
+                    <span class="star text-xl ml-2">⭐</span>
+                    <span class="star text-xl ml-1">✨</span>
+                </div>
+                <h3 class="font-bold text-gray-800 mt-2" style="font-size: 30px;">很好的選擇！</h3>
+            </div>
+
+            <!-- 個人化回饋 -->
+            <div class="feedback-card bg-white rounded-xl p-6 mb-4 card-shadow">
+                <h4 class="font-semibold text-gray-800 mb-3 flex items-center" style="font-size: 30px;">
+                    <span class="bg-blue-100 text-blue-600 rounded-full w-10 h-10 flex items-center justify-center font-bold mr-3" style="font-size: 28px;" id="selectedOption"></span>
+                    你的管理風格分析
+                </h4>
+                <p class="text-gray-700 leading-relaxed" style="font-size: 26px;" id="feedbackText"></p>
+            </div>
+
+
+
+            <!-- 本週挑戰任務 -->
+            <div class="feedback-card bg-white rounded-xl p-6 mb-4 card-shadow border-l-4 border-yellow-400">
+                <h4 class="font-semibold text-gray-800 mb-3 flex items-center" style="font-size: 30px;">
+                    🎯 本月挑戰任務
+                </h4>
+                <p class="text-gray-700 leading-relaxed mb-3" style="font-size: 26px;">
+                    請選擇一位你感受到「有討好傾向」的部屬，嘗試用你選擇的方式與他互動，並觀察他的反應與變化，記錄一項你學到的洞察。
+                </p>
+                <div class="bg-yellow-50 rounded-lg p-3">
+                    <p class="text-yellow-800 font-medium" style="font-size: 28px;">💡 提醒：實踐是最好的學習方式，期待你的發現！</p>
+                </div>
+            </div>
+
+            <!-- 反思提交區 -->
+            <div class="feedback-card bg-white rounded-xl p-6 card-shadow" id="reflectionSection">
+                <h4 class="font-semibold text-gray-800 mb-3 flex items-center" style="font-size: 30px;">
+                    📬 <strong>跟我們分享你的答案</strong>
+                </h4>
+                <div class="space-y-3">
+                    <p class="text-gray-700 leading-relaxed" style="font-size: 26px;">
+                        跟我們分享你的選擇，可以獲得進一步的學習資源。
+                    </p>
+                    <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-400">
+                        <p class="text-blue-800 font-medium mb-3" style="font-size: 28px;">👉 點擊下方按鈕將開啟 Microsoft 表單：</p>
+                        <button class="pulse-btn bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg font-bold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105" style="font-size: 28px;" onclick="submitReflection()">
+                            ✨ 分享答案
+                        </button>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-gray-500" style="font-size: 26px;">💡 你的分享將幫助更多管理者成長</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 學習資源頁面 -->
+            <div id="learningResourcesSection" class="hidden">
+                <!-- 感謝訊息 -->
+                <div class="text-center mb-4">
+                    <div class="celebration inline-block">
+                        <span class="text-3xl">🙏</span>
+                        <span class="star text-xl ml-2">💫</span>
+                        <span class="star text-xl ml-1">✨</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 mt-2" style="font-size: 30px;">感謝你的分享！</h3>
+                    <p class="text-gray-600 mt-1" style="font-size: 28px;">以下是為你準備的學習資源</p>
+                </div>
+
+                <!-- 延伸學習資源 -->
+                <div class="feedback-card bg-white rounded-xl p-6 mb-4 card-shadow">
+                    <h4 class="font-semibold text-gray-800 mb-4 flex items-center" style="font-size: 30px;">
+                        📚 為你推薦的學習資源
+                    </h4>
+                    <div id="learningResourcesContent">
+                        <!-- 動態載入對應選項的學習資源 -->
+                    </div>
+                </div>
+
+                <!-- 下週預告 -->
+                <div class="feedback-card bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-6 text-white">
+                    <h4 class="font-semibold mb-3 flex items-center" style="font-size: 30px;">
+                        🔮 下月預告
+                    </h4>
+                    <p class="leading-relaxed mb-3" style="font-size: 26px;">
+                        下月我們將探討「如何處理團隊中的衝突情境」，包含不同性格員工之間的摩擦處理技巧。
+                    </p>
+                    <div class="bg-white bg-opacity-20 rounded-lg p-3">
+                        <p class="font-medium" style="font-size: 28px;">💡 提前思考：你的團隊中是否有需要調解的人際關係？</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 重新開始按鈕 -->
+            <div class="text-center mt-4">
+                <button onclick="resetModule()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2 rounded-lg font-medium transition-all duration-300" style="font-size: 28px;">
+                    🔄 重新挑戰
+                </button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        const feedbacks = {
+            'A': '你重視團隊氣氛與人際關係，傾向先觀察再行動。這樣的態度有助於維持部屬的積極性，但也要小心是否因此延誤對績效問題的處理，可能讓其他成員覺得「只要會表現就行」。',
+            'B': '你傾向透過清楚對話解決問題，這展現了你對心理安全與溝通透明的重視。若能搭配具體例子與對未來行為的期待說明，將有助於部屬理解自己的行為在團隊中的影響。',
+            'C': '你以制度與績效為導向，能有效避免「表現與實質不符」的狀況。這有助於建立公平性與信任感，但需注意執行的柔軟度，避免讓部屬覺得過於機械或壓力太大。',
+            'D': '你善於看見部屬的潛力並願意投入時間培育。這樣的關係能提升部屬的忠誠度與投入感，但也要記得平衡情感連結與績效要求，以免忽略他實際需要改進的部分。'
+        };
+
+        const skills = {
+            'A': '「同理觀察與延後評價」技巧',
+            'B': '「SBI回饋模型」（情境、行為、影響）',
+            'C': '「目標共構式KPI設定法」',
+            'D': '「人才潛力盤點與發展對話法」'
+        };
+
+        // 儲存當前選擇的選項
+        let currentSelectedOption = null;
+
+        // 根據選項提供對應的學習資源
+        const learningResources = {
+            'A': {
+                books: [
+                    '<a href="https://www.books.com.tw/products/0010702291?sloc=main" target="_blank" class="text-green-700 hover:text-green-900 underline">《EQ：決定一生幸福與成就的永恆力量》- 丹尼爾·高曼</a>',
+                    '<a href="https://www.books.com.tw/products/0010840548?sloc=main" target="_blank" class="text-green-700 hover:text-green-900 underline">《安靜，就是力量》- 蘇珊·坎恩</a>'
+                ]
+            },
+            'B': {
+                books: [
+                    '<a href="https://www.books.com.tw/products/CN11988390?loc=P_br_60nq68yhb_D_2aabdc_B_1" target="_blank" class="text-green-700 hover:text-green-900 underline">《關鍵對話：如何高效能溝通》- 約瑟夫·格雷尼等</a>',
+                    '<a href="https://www.books.com.tw/products/0010831754?sloc=main" target="_blank" class="text-green-700 hover:text-green-900 underline">《非暴力溝通：愛的語言》- 馬歇爾·盧森堡</a>'
+                ]
+            },
+            'C': {
+                books: [
+                    '<a href="https://www.books.com.tw/products/0010813170?sloc=main" target="_blank" class="text-green-700 hover:text-green-900 underline">《OKR：做最重要的事》- 約翰·杜爾</a>'
+                ]
+            },
+            'D': {
+                books: [
+                    '<a href="https://www.books.com.tw/products/0011028109?sloc=main" target="_blank" class="text-green-700 hover:text-green-900 underline">《給予與索取》- 亞當·格蘭特</a>'
+                ]
+            }
+        };
+
+        // 生成學習資源內容
+        function generateLearningResources(option) {
+            const resources = learningResources[option];
+            return `
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border-l-4 border-blue-400">
+                    <div class="space-y-4">
+                        <div>
+                            <h5 class="font-semibold text-blue-800 mb-3 flex items-center" style="font-size: 28px;">
+                                📚 推薦學習資源
+                            </h5>
+                            <ul class="space-y-3 text-blue-700" style="font-size: 26px;">
+                                ${resources.books.map(book => `<li>• ${book}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectOption(option) {
+            // 儲存當前選擇
+            currentSelectedOption = option;
+            
+            // 隱藏選項按鈕
+            document.getElementById('optionsContainer').style.display = 'none';
+            
+            // 顯示回饋區域
+            const feedbackSection = document.getElementById('feedbackSection');
+            feedbackSection.classList.remove('hidden');
+            
+            // 設置選中的選項
+            document.getElementById('selectedOption').textContent = option;
+            document.getElementById('feedbackText').textContent = feedbacks[option];
+            
+            // 添加動畫效果
+            setTimeout(() => {
+                const feedbackCards = document.querySelectorAll('.feedback-card');
+                feedbackCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('show');
+                    }, index * 200);
+                });
+            }, 100);
+            
+            // 滾動到回饋區域
+            setTimeout(() => {
+                feedbackSection.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+
+        function submitReflection() {
+            // 開啟 Microsoft 表單（新視窗）
+            window.open('https://forms.office.com/Pages/ResponsePage.aspx?id=tUlelye230m2opJGjgAcv7-zKNBDcUFOs36fc3SqlZNUQ1dVM1VRWTMzNzRGVFgxOFU1QTVBN0lUTy4u', '_blank');
+            
+            // 延遲顯示學習資源，讓使用者有時間填寫表單
+            setTimeout(() => {
+                // 隱藏反思提交區
+                document.getElementById('reflectionSection').style.display = 'none';
+                
+                // 載入對應選項的學習資源
+                if (currentSelectedOption) {
+                    document.getElementById('learningResourcesContent').innerHTML = generateLearningResources(currentSelectedOption);
+                }
+                
+                // 顯示學習資源區
+                const learningSection = document.getElementById('learningResourcesSection');
+                learningSection.classList.remove('hidden');
+                
+                // 添加動畫效果
+                setTimeout(() => {
+                    const feedbackCards = learningSection.querySelectorAll('.feedback-card');
+                    feedbackCards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.add('show');
+                        }, index * 200);
+                    });
+                }, 100);
+                
+                // 滾動到學習資源區域
+                setTimeout(() => {
+                    learningSection.scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            }, 2000); // 2秒後顯示學習資源
+        }
+
+        function resetModule() {
+            // 重置當前選擇
+            currentSelectedOption = null;
+            
+            // 隱藏回饋區域和學習資源區域
+            document.getElementById('feedbackSection').classList.add('hidden');
+            document.getElementById('learningResourcesSection').classList.add('hidden');
+            
+            // 顯示選項按鈕
+            document.getElementById('optionsContainer').style.display = 'grid';
+            
+            // 重新顯示反思提交區
+            document.getElementById('reflectionSection').style.display = 'block';
+            
+            // 重置動畫狀態
+            const feedbackCards = document.querySelectorAll('.feedback-card');
+            feedbackCards.forEach(card => {
+                card.classList.remove('show');
+            });
+            
+            // 清空學習資源內容
+            document.getElementById('learningResourcesContent').innerHTML = '';
+            
+            // 清空輸入欄位
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+            
+            // 滾動到頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97170b81c3ef8282',t:'MTc1NTU3OTE4Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
